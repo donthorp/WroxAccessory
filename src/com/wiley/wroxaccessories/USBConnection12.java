@@ -9,29 +9,29 @@ import java.io.OutputStream;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.usb.UsbAccessory;
 import android.hardware.usb.UsbManager;
 import android.os.ParcelFileDescriptor;
 
-public class USBConnection12 extends Connection {
+public class UsbConnection12 extends Connection {
 	private FileInputStream mFileInputStream;
 	private FileOutputStream mFileOutputStream;
 	private ParcelFileDescriptor mFileDescriptor;
-	private UsbAccessory mUsbAccessory; //????
 	private Activity mActivity;
-	public USBConnection12(UsbManager usbmanager) {
-		UsbAccessory[] accessories = usbmanager.getAccessoryList();
+
+	public UsbConnection12(UsbManager usbmanager) {
+		UsbAccessory[] accessories = manager.getAccessoryList();
 		UsbAccessory accessory = (accessories == null ? null : accessories[0]);
 		if (accessory != null) {
 			mUsbAccessory = accessory;
 			if (manager.hasPermission(mUsbAccessory)) {
 				mFileDescriptor = usbmanager.openAccessory(accessory);
 				if (mFileDescriptor != null) {
-					FileDescriptor mFileDescriptor = mFileDescriptor.getFileDescriptor();
+					FileDescriptor mFileDescriptor = mFileDescriptor
+							.getFileDescriptor();
 					mFileInputStream = new FileInputStream(mFileDescriptor);
-					mFileOutputSteam = new FileOutputStream(mFileDescriptor);
+					mFileOutputStream = new FileOutputStream(mFileDescriptor);
 				}
 			}
 		}
@@ -39,7 +39,7 @@ public class USBConnection12 extends Connection {
 		mIntentFilter.addAction(UsbManager.ACTION_USB_ACCESSORY_DETACHED);
 		mActivity.registerReceiver(mBroadcastReceiver, mIntentFilter);
 	}
-	
+
 	@Override
 	public InputStream getInputStream() throws IOException {
 		return mFileInputStream;
@@ -57,14 +57,13 @@ public class USBConnection12 extends Connection {
 		}
 		mActivity.unregisterReceiver(mBroadcastReceiver);
 	}
-	
+
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if(intent.getAction().equals(UsbManager.ACTION_USB_ACCESSORY_DETACHED)) {
-				
+			if (intent.getAction().equals(
+					UsbManager.ACTION_USB_ACCESSORY_DETACHED)) {
 			}
 		}
-	}
-
+	};
 }

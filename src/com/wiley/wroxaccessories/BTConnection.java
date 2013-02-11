@@ -12,16 +12,19 @@ public class BTConnection extends Connection {
 	private BluetoothSocket mBluetoothSocket;
 	private BluetoothAdapter mBluetoothAdapter;
 	private UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
 	public BTConnection(String address) {
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		BluetoothDevice mDevice = mBluetoothAdapter.getRemoteDevice(address);
 		try {
-			mBluetoothSocket = mDevice.createInsecureRfcommSocketToServiceRecord(uuid);
+			mBluetoothSocket = mDevice
+					.createInsecureRfcommSocketToServiceRecord(uuid);
 			mBluetoothSocket.connect();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+
 	@Override
 	public InputStream getInputStream() throws IOException {
 		return mBluetoothSocket.getInputStream();
@@ -36,5 +39,4 @@ public class BTConnection extends Connection {
 	public void close() throws IOException {
 		mBluetoothSocket.close();
 	}
-
 }

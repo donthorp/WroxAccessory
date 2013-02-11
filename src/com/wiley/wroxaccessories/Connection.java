@@ -6,6 +6,8 @@ import java.io.OutputStream;
 
 public abstract class Connection {
 	public abstract InputStream getInputStream() throws IOException;
+
 	public abstract OutputStream getOutputStream() throws IOException;
+
 	public abstract void close() throws IOException;
 }
